@@ -1,3 +1,4 @@
+```
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,3 +14,4 @@
     <script src="plots.js"></script>
 </body>
 </html>
+```
