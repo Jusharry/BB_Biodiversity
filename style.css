@@ -1,0 +1,17 @@
+body {
+    background: #EAF0EE;
+    background: -webkit-linear-gradient(top, #EAF0EE, #8C8A8C);
+    background: -moz-linear-gradient(top, #EAF0EE, #8C8A8C);
+    background: linear-gradient(to bottom, #EAF0EE, #8C8A8C);
+    color: #0e0b0b;
+  }
+  .jumbotron{
+  
+    background: #EAF0EE;
+    background: -webkit-linear-gradient(bottom, #EAF0EE, #9E9C9E);
+    background: -moz-linear-gradient(bottom, #EAF0EE, #9E9C9E);
+    background: linear-gradient(to top, #EAF0EE, #9E9C9E);
+    /* background-color: #8e9ea1; */
+    background-size: 100% 100%;
+    text-align: center;
+  }
