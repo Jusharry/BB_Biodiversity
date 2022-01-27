@@ -138,7 +138,7 @@ d3.json("samples.json").then((data) => {
     type: "indicator",
     mode: "gauge+number",
     gauge: {
-      axis: { range: [null, 10] },
+      axis: { range: [0, 10] },
       bar: {color:"black"},
       steps: [
         { range: [0, 2], color: "red" },
