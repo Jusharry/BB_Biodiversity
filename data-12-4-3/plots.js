@@ -1,5 +1,5 @@
 function init() {
-    var selector = d3.select("#selDataset").on("load",optionChanged);
+    var selector = d3.select("#selDataset");
   
     d3.json("samples.json").then((data) => {
       console.log(data);
@@ -10,9 +10,12 @@ function init() {
           .text(sample)
           .property("value", sample);
       });
-      
+     // Call the functions to display the content relative to the first name on page launch
+      buildCharts(sampleNames[0]);
+      buildMetadata(sampleNames[0]);
   })
-  
+ 
+ 
 }
 
 
@@ -62,14 +65,12 @@ function buildCharts(sample) {
     var otuIds = chartResult.otu_ids;
     var otuLabels = chartResult.otu_labels;
     var sampleValues = chartResult.sample_values;
-    console.log(sampleValues);
-    console.log(otuIds);
+    // console.log(sampleValues);
+    // console.log(otuIds);
 
     // 7. Create the yticks for the bar chart.
     // Hint: Get the the top 10 otu_ids and map them in descending order  
     //  so the otu_ids with the most bacteria are last. 
-    
-    
     var xticks = sampleValues.sort((a,b)=>b-a).slice(0, 10).reverse();
     var yticks = otuIds.sort((a,b)=> b - a).slice(0, 10).reverse();
     // var newTicks = yticks.map(row=>row.yticks);
@@ -96,15 +97,19 @@ function buildCharts(sample) {
     // 10. Use Plotly to plot the data with the layout. 
     Plotly.newPlot("bar", [trace1],barLayout);
 
+    var xplot = otuIds.sort((a,b)=>b-a).reverse();
+    var yplot = sampleValues.sort((a,b)=>b-a).reverse();
+
     var trace2 = {
       x:otuIds,
       y:sampleValues,
       text:otuLabels,
       mode:"markers",
-      type:"scatter",
+      // type:"scatter",
       marker:{
         color:otuIds,
-        size:sampleValues
+        size:sampleValues,
+        colorscale:"Earth"
 
       }
 
@@ -112,13 +117,46 @@ function buildCharts(sample) {
     
     var bubLayout = {
       title: "Bacteria Cultures Per Sample",
+      margin:{t:0},
+      hovermode:"closest",
       xaxis:{title:"OTU ID"},
-      showlegend: false,
+      margin:{t:30},
+      // showlegend: false,
       height: 600,
       width: 1200
      };
 
     Plotly.newPlot("bubble",[trace2],bubLayout);
+
+    var washFreq = (data.metadata.filter(sampleObj => sampleObj.id == sample))[0].wfreq;
+    // console.log(washFreq);
+
+    var gaugeData = [{
+      domain: { x: otuIds, y:sampleValues },
+		  value: washFreq,
+		  title: { text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week" },
+		  type: "indicator",
+		  mode: "gauge+number",
+      gauge: {
+        axis: { range: [null, 10] },
+        bar: {color:"black"},
+        steps: [
+          { range: [0, 2], color: "red" },
+          { range: [2, 4], color: "orange" },
+          { range: [4, 6], color: "yellow"},
+          { range: [6, 8], color: "lightgreen"},
+          { range: [8, 10], color: "green"}
+
+        ]}
+    }
+     
+    ];
+
+    var gaugeLayout = {
+      width: 600, height: 450, margin: { t: 0, b: 0 }
+     
+    };
+    Plotly.newPlot("gauge",gaugeData,gaugeLayout);
   });
 }
 
