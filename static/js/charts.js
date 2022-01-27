@@ -36,7 +36,7 @@ function buildMetadata(sample){
         var PANEL = d3.select("#sample-metadata");
         PANEL.html("");
         Object.entries(result).forEach(([key,value])=>{
-            dataResult = (key +":"+ value);
+            dataResult = (key.toUpperCase() +": "+ value);
             // console.log(key +":"+value);
          
         
@@ -72,8 +72,7 @@ d3.json("samples.json").then((data) => {
   // Hint: Get the the top 10 otu_ids and map them in descending order  
   //  so the otu_ids with the most bacteria are last. 
   var xticks = sampleValues.sort((a,b)=>b-a).slice(0, 10).reverse();
-  var yticks = otuIds.sort((a,b)=> b - a).slice(0, 10).reverse();
-  // var newTicks = yticks.map(row=>row.yticks);
+  var yticks = otuIds.slice(0,10).map(elem=> `OTU :${elem}`).reverse();
   // console.log(yticks);
   // console.log(xticks);
   
@@ -81,7 +80,7 @@ d3.json("samples.json").then((data) => {
   // 8. Create the trace for the bar chart. 
   var trace1 = {
     x: xticks,
-    y: yticks.map(elem=>"OTU"+ ":" + elem),
+    y: yticks,
     orientation:"h",
     type:"bar"
     };
@@ -97,15 +96,12 @@ d3.json("samples.json").then((data) => {
   // 10. Use Plotly to plot the data with the layout. 
   Plotly.newPlot("bar", [trace1],barLayout);
 
-  var xplot = otuIds.sort((a,b)=>b-a).reverse();
-  var yplot = sampleValues.sort((a,b)=>b-a).reverse();
 
   var trace2 = {
     x:otuIds,
     y:sampleValues,
     text:otuLabels,
     mode:"markers",
-    // type:"scatter",
     marker:{
       color:otuIds,
       size:sampleValues,
@@ -117,11 +113,8 @@ d3.json("samples.json").then((data) => {
   
   var bubLayout = {
     title: "Bacteria Cultures Per Sample",
-    margin:{t:0},
     hovermode:"closest",
     xaxis:{title:"OTU ID"},
-    margin:{t:30},
-    // showlegend: false,
     height: 600,
     width: 1200
    };
@@ -129,7 +122,7 @@ d3.json("samples.json").then((data) => {
   Plotly.newPlot("bubble",[trace2],bubLayout);
 
   var washFreq = (data.metadata.filter(sampleObj => sampleObj.id == sample))[0].wfreq;
-  // console.log(washFreq);
+  
 
   var gaugeData = [{
     domain: { x: otuIds, y:sampleValues },
