@@ -109,7 +109,7 @@ function buildCharts(sample) {
       marker:{
         color:otuIds,
         size:sampleValues,
-        colorscale:"Earth"
+        colorscale:"Rainbow"
 
       }
 

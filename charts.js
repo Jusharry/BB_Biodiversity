@@ -109,7 +109,7 @@ d3.json("samples.json").then((data) => {
     marker:{
       color:otuIds,
       size:sampleValues,
-      colorscale:"Earth"
+      colorscale:"Rainbow"
 
     }
 
